@@ -101,12 +101,16 @@ function App() {
     // </div>
     <div className="App">
       {/* {users.map((usr) => (<Msg name={usr.name} pic={usr.pic} />))} */}
-      <div className="movie-list">
+
+
+      {/* <div className="movie-list">
         {movieList.map((mv) => (
           <Movie movie={mv} />
         ))}
 
-      </div>
+      </div> */}
+      <AddColor />
+
 
     </div>
 
@@ -114,6 +118,40 @@ function App() {
 
   )
 }
+
+function AddColor() {
+  const [color, setColor] = useState("blue");
+  const styles = { background: color, };
+  const [colorList, setColorList] = useState(["red", "skyblue", "green"]);
+  return (
+    <div>
+      <input type="text" style={styles}
+        onChange={(event) => setColor(event.target.value)}
+        value={color} />
+      <button onClick={() => setColorList([...colorList, color])}>Add Color</button>
+      {colorList.map((clr) => (
+        <ColorBox clr={clr} />
+      ))}
+      <ColorBox clr="red" />
+      <ColorBox clr="blue" />
+    </div>
+  )
+
+}
+
+function ColorBox({ clr }) {
+  const styles = {
+    height: "25px",
+    width: "250px",
+    background: clr,
+    marginTop: "20px",
+  };
+  return <div style={styles}></div>
+}
+
+
+
+
 
 function Movie({ movie }) {
   // const movie = {
@@ -124,17 +162,27 @@ function Movie({ movie }) {
   //   summary:
   //     "Members of a black ops team must track and eliminate a gang of masked murderers."
   // };
+  //conditional styling
+  const styles = {
+    color: movie.rating > 8.5 ?
+      "green" : "red",
+  };
+  const [show, setShow] = useState(true);
   return (
     <div className="movie-container">
       <img src={movie.poster} alt={movie.name} className="movie-poster" />
       <div className="movie-specs">
         <h2 className="movie-name">{movie.name}</h2>
-        <p className="movie-rating"> ⭐{movie.rating} </p>
+        <p style={styles} className="movie-rating"> ⭐{movie.rating} </p>
       </div>
-      <p className="movie-summary">{movie.summary}</p>
+      <button onClick={() => setShow(!show)}>Toggle Summary</button>{show + ""}
+      {show ? <p className="movie-summary">{movie.summary}</p> : null}
+      <Counter />
     </div>
-  )
+  );
 }
+
+
 
 function Welcome({ name }) {
   return (
